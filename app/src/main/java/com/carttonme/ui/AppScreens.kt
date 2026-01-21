@@ -1,5 +1,6 @@
 package com.carttonme.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,6 +25,7 @@ import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -67,6 +69,64 @@ fun MainScreen(
     onSmurfMe: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    Scaffold(
+        modifier = modifier.fillMaxSize(),
+        bottomBar = {
+            Button(
+                onClick = onSmurfMe,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            ) {
+                Text(text = stringResource(id = R.string.smurf_me))
+            }
+        }
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(horizontal = 16.dp, vertical = 12.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = stringResource(id = R.string.main_title),
+                    style = MaterialTheme.typography.headlineSmall
+                )
+                IconButton(onClick = onToggleLayout) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_layout_toggle),
+                        contentDescription = stringResource(id = R.string.toggle_layout)
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(12.dp))
+            if (isGrid) {
+                LazyVerticalGrid(
+                    columns = GridCells.Adaptive(160.dp),
+                    contentPadding = PaddingValues(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(smurfs.size) { index ->
+                        SmurfCard(
+                            smurf = smurfs[index],
+                            onClick = { onSmurfSelected(smurfs[index]) }
+                        )
+                    }
+                }
+            } else {
+                LazyColumn(contentPadding = PaddingValues(8.dp)) {
+                    items(smurfs) { smurf ->
+                        SmurfRow(smurf = smurf, onClick = { onSmurfSelected(smurf) })
+                    }
+                }
+            }
+        }
     Column(modifier = modifier.fillMaxSize().padding(16.dp)) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -161,6 +221,12 @@ fun SmurfMeScreen(
     val isProcessing by viewModel.isProcessing.collectAsState()
     val showAd by viewModel.showAd.collectAsState()
 
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.08f))
+            .padding(16.dp)
+    ) {
     Column(modifier = modifier.fillMaxSize().padding(16.dp)) {
         Text(
             text = stringResource(id = R.string.smurf_me_title),
@@ -170,6 +236,17 @@ fun SmurfMeScreen(
         Card(modifier = Modifier.fillMaxWidth()) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
+                    text = stringResource(id = R.string.smurf_me_mission),
+                    style = MaterialTheme.typography.bodyLarge
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Button(onClick = { viewModel.selectImage("fake://upload") }) {
+                        Text(text = stringResource(id = R.string.upload_image))
+                    }
+                    Button(onClick = { viewModel.selectImage("fake://camera") }) {
+                        Text(text = stringResource(id = R.string.take_photo))
+                    }
                     text = stringResource(id = R.string.upload_prompt),
                     style = MaterialTheme.typography.bodyLarge
                 )

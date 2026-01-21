@@ -29,6 +29,7 @@ class SmurfMeViewModel : ViewModel() {
             _showAd.value = true
             delay(2000)
             _isProcessing.value = false
+            _showAd.value = false
         }
     }
 
