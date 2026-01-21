@@ -41,16 +41,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import coil.compose.AsyncImage
 import com.carttonme.R
 import com.carttonme.model.Smurf
@@ -174,7 +173,6 @@ fun SmurfScreen(smurf: Smurf, onBack: () -> Unit, modifier: Modifier = Modifier)
                     scaleY = bounce
                 )
                 .rotate(rotation)
-            modifier = Modifier.fillMaxSize()
         )
         Column(
             modifier = Modifier
@@ -219,8 +217,19 @@ fun SmurfMeScreen(
     modifier: Modifier = Modifier
 ) {
     val selectedImage by viewModel.selectedImage.collectAsState()
+    val selectedBitmap by viewModel.selectedBitmap.collectAsState()
     val isProcessing by viewModel.isProcessing.collectAsState()
     val showAd by viewModel.showAd.collectAsState()
+    val uploadLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri ->
+        uri?.let { viewModel.selectImage(it.toString()) }
+    }
+    val cameraLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicturePreview()
+    ) { bitmap ->
+        bitmap?.let { viewModel.selectBitmap(it) }
+    }
 
     Column(
         modifier = modifier
@@ -241,14 +250,36 @@ fun SmurfMeScreen(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Button(onClick = { viewModel.selectImage("fake://upload") }) {
+                    Button(onClick = { uploadLauncher.launch("image/*") }) {
                         Text(text = stringResource(id = R.string.upload_image))
                     }
-                    Button(onClick = { viewModel.selectImage("fake://camera") }) {
+                    Button(onClick = { cameraLauncher.launch(null) }) {
                         Text(text = stringResource(id = R.string.take_photo))
                     }
                 }
-                selectedImage?.let {
+                if (selectedBitmap != null || selectedImage != null) {
+                    Spacer(modifier = Modifier.height(12.dp))
+                    if (selectedBitmap != null) {
+                        androidx.compose.foundation.Image(
+                            bitmap = selectedBitmap!!.asImageBitmap(),
+                            contentDescription = stringResource(id = R.string.upload_image),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(220.dp),
+                            contentScale = ContentScale.Crop
+                        )
+                    } else if (selectedImage != null) {
+                        AsyncImage(
+                            model = selectedImage,
+                            contentDescription = stringResource(id = R.string.upload_image),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(220.dp),
+                            contentScale = ContentScale.Crop
+                        )
+                    }
+                }
+                if (selectedBitmap != null || selectedImage != null) {
                     Spacer(modifier = Modifier.height(12.dp))
                     Text(text = stringResource(id = R.string.processing_status, smurfs.random().name))
                 }
@@ -292,7 +323,6 @@ fun SmurfMeScreen(
 
 @Composable
 private fun SmurfCard(smurf: Smurf, onClick: () -> Unit) {
-fun SmurfCard(smurf: Smurf, onClick: () -> Unit) {
     Card(modifier = Modifier.clickable(onClick = onClick)) {
         Column(modifier = Modifier.padding(12.dp)) {
             AsyncImage(
@@ -311,7 +341,6 @@ fun SmurfCard(smurf: Smurf, onClick: () -> Unit) {
 
 @Composable
 private fun SmurfRow(smurf: Smurf, onClick: () -> Unit) {
-fun SmurfRow(smurf: Smurf, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()

@@ -1,5 +1,6 @@
 package com.carttonme.ui
 
+import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
@@ -12,6 +13,9 @@ class SmurfMeViewModel : ViewModel() {
     private val _selectedImage = MutableStateFlow<String?>(null)
     val selectedImage: StateFlow<String?> = _selectedImage.asStateFlow()
 
+    private val _selectedBitmap = MutableStateFlow<Bitmap?>(null)
+    val selectedBitmap: StateFlow<Bitmap?> = _selectedBitmap.asStateFlow()
+
     private val _isProcessing = MutableStateFlow(false)
     val isProcessing: StateFlow<Boolean> = _isProcessing.asStateFlow()
 
@@ -20,6 +24,13 @@ class SmurfMeViewModel : ViewModel() {
 
     fun selectImage(fakeUri: String) {
         _selectedImage.value = fakeUri
+        _selectedBitmap.value = null
+        runSmurfify()
+    }
+
+    fun selectBitmap(bitmap: Bitmap) {
+        _selectedBitmap.value = bitmap
+        _selectedImage.value = null
         runSmurfify()
     }
 

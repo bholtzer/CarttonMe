@@ -9,7 +9,6 @@
     <string name="smurf_me_mission">Sube o toma una foto para transformar a la persona en un Pitufo real manteniendo su parecido.</string>
     <string name="upload_image">Subir imagen</string>
     <string name="take_photo">Tomar foto</string>
-    <string name="upload_prompt">Sube tu retrato para convertirte en un Pitufo o Gargamel.</string>
     <string name="processing_status">Buscando a %1$s...</string>
     <string name="processing_image">Procesando la imagen en segundo plano...</string>
     <string name="ad_title">Anuncio de la aldea</string>
