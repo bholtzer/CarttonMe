@@ -12,6 +12,9 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.carttonme.data.SmurfRepository
 import com.carttonme.ui.AppDestination
+import com.carttonme.ui.CarttonMeTheme
+import com.carttonme.ui.LoadingScreen
+import com.carttonme.ui.LoadingViewModel
 import com.carttonme.ui.theme.CarttonMeTheme
 import com.carttonme.ui.LoadingScreen
 import com.carttonme.ui.LoadingViewModel

@@ -17,4 +17,5 @@
     <string name="close">Cerrar</string>
     <string name="back">Atrás</string>
     <string name="smurf_personality">%1$s</string>
+    <string name="smurf_talking">“%1$s”</string>
 </resources>

@@ -1,5 +1,7 @@
 package com.carttonme.ui
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -29,6 +31,16 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -132,11 +144,36 @@ fun MainScreen(
 
 @Composable
 fun SmurfScreen(smurf: Smurf, onBack: () -> Unit, modifier: Modifier = Modifier) {
+    var isDancing by remember { mutableStateOf(false) }
+    val rotation by animateFloatAsState(
+        targetValue = if (isDancing) 6f else 0f,
+        animationSpec = tween(durationMillis = 250),
+        label = "smurfDanceRotation"
+    )
+    val bounce by animateFloatAsState(
+        targetValue = if (isDancing) 1.04f else 1f,
+        animationSpec = tween(durationMillis = 250),
+        label = "smurfDanceBounce"
+    )
+    LaunchedEffect(isDancing) {
+        if (isDancing) {
+            kotlinx.coroutines.delay(1800)
+            isDancing = false
+        }
+    }
     Box(modifier = modifier.fillMaxSize()) {
         AsyncImage(
             model = smurf.imageUrl,
             contentDescription = smurf.name,
             contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .fillMaxSize()
+                .clickable { isDancing = true }
+                .graphicsLayer(
+                    scaleX = bounce,
+                    scaleY = bounce
+                )
+                .rotate(rotation)
             modifier = Modifier.fillMaxSize()
         )
         Column(
@@ -156,6 +193,16 @@ fun SmurfScreen(smurf: Smurf, onBack: () -> Unit, modifier: Modifier = Modifier)
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onPrimary
             )
+            if (isDancing) {
+                Spacer(modifier = Modifier.height(12.dp))
+                Card(modifier = Modifier.fillMaxWidth()) {
+                    Text(
+                        text = stringResource(id = R.string.smurf_talking, smurf.text),
+                        modifier = Modifier.padding(12.dp),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            }
             Spacer(modifier = Modifier.height(12.dp))
             ElevatedButton(onClick = onBack) {
                 Text(text = stringResource(id = R.string.back))
@@ -244,6 +291,7 @@ fun SmurfMeScreen(
 }
 
 @Composable
+private fun SmurfCard(smurf: Smurf, onClick: () -> Unit) {
 fun SmurfCard(smurf: Smurf, onClick: () -> Unit) {
     Card(modifier = Modifier.clickable(onClick = onClick)) {
         Column(modifier = Modifier.padding(12.dp)) {
@@ -262,6 +310,7 @@ fun SmurfCard(smurf: Smurf, onClick: () -> Unit) {
 }
 
 @Composable
+private fun SmurfRow(smurf: Smurf, onClick: () -> Unit) {
 fun SmurfRow(smurf: Smurf, onClick: () -> Unit) {
     Card(
         modifier = Modifier
