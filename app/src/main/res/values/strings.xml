@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">CarttonMe</string>
+    <string name="loading_title">Loading Smurf Village...</string>
+    <string name="main_title">Meet the Smurfs</string>
+    <string name="toggle_layout">Toggle layout</string>
+    <string name="smurf_me">Smurf Me</string>
+    <string name="smurf_me_title">Smurf Me Studio</string>
+    <string name="smurf_me_mission">Upload or take a photo so we can transform the person into a real Smurf look while keeping their likeness.</string>
+    <string name="upload_image">Upload Image</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="processing_status">Matching you with %1$s...</string>
+    <string name="processing_image">Processing image in the background...</string>
+    <string name="ad_title">Smurf Village Ad</string>
+    <string name="ad_body">Your smurfification is on the way! Enjoy this short message.</string>
+    <string name="close">Close</string>
+    <string name="back">Back</string>
+    <string name="smurf_personality">%1$s</string>
+</resources>
