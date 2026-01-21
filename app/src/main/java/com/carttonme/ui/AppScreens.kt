@@ -1,6 +1,5 @@
 package com.carttonme.ui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -162,12 +161,7 @@ fun SmurfMeScreen(
     val isProcessing by viewModel.isProcessing.collectAsState()
     val showAd by viewModel.showAd.collectAsState()
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.08f))
-            .padding(16.dp)
-    ) {
+    Column(modifier = modifier.fillMaxSize().padding(16.dp)) {
         Text(
             text = stringResource(id = R.string.smurf_me_title),
             style = MaterialTheme.typography.headlineSmall
@@ -176,17 +170,12 @@ fun SmurfMeScreen(
         Card(modifier = Modifier.fillMaxWidth()) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
-                    text = stringResource(id = R.string.smurf_me_mission),
+                    text = stringResource(id = R.string.upload_prompt),
                     style = MaterialTheme.typography.bodyLarge
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Button(onClick = { viewModel.selectImage("fake://upload") }) {
-                        Text(text = stringResource(id = R.string.upload_image))
-                    }
-                    Button(onClick = { viewModel.selectImage("fake://camera") }) {
-                        Text(text = stringResource(id = R.string.take_photo))
-                    }
+                Button(onClick = { viewModel.selectImage("fake://portrait") }) {
+                    Text(text = stringResource(id = R.string.upload_image))
                 }
                 selectedImage?.let {
                     Spacer(modifier = Modifier.height(12.dp))
