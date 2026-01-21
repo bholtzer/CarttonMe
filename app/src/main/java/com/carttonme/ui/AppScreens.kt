@@ -127,52 +127,6 @@ fun MainScreen(
                 }
             }
         }
-    Column(modifier = modifier.fillMaxSize().padding(16.dp)) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = stringResource(id = R.string.main_title),
-                style = MaterialTheme.typography.headlineSmall
-            )
-            IconButton(onClick = onToggleLayout) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_layout_toggle),
-                    contentDescription = stringResource(id = R.string.toggle_layout)
-                )
-            }
-        }
-        Spacer(modifier = Modifier.height(12.dp))
-        if (isGrid) {
-            LazyVerticalGrid(
-                columns = GridCells.Adaptive(160.dp),
-                contentPadding = PaddingValues(8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(smurfs.size) { index ->
-                    SmurfCard(
-                        smurf = smurfs[index],
-                        onClick = { onSmurfSelected(smurfs[index]) }
-                    )
-                }
-            }
-        } else {
-            LazyColumn(contentPadding = PaddingValues(8.dp)) {
-                items(smurfs) { smurf ->
-                    SmurfRow(smurf = smurf, onClick = { onSmurfSelected(smurf) })
-                }
-            }
-        }
-        Spacer(modifier = Modifier.height(12.dp))
-        Button(
-            onClick = onSmurfMe,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(text = stringResource(id = R.string.smurf_me))
-        }
     }
 }
 
@@ -227,7 +181,6 @@ fun SmurfMeScreen(
             .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.08f))
             .padding(16.dp)
     ) {
-    Column(modifier = modifier.fillMaxSize().padding(16.dp)) {
         Text(
             text = stringResource(id = R.string.smurf_me_title),
             style = MaterialTheme.typography.headlineSmall
@@ -247,12 +200,6 @@ fun SmurfMeScreen(
                     Button(onClick = { viewModel.selectImage("fake://camera") }) {
                         Text(text = stringResource(id = R.string.take_photo))
                     }
-                    text = stringResource(id = R.string.upload_prompt),
-                    style = MaterialTheme.typography.bodyLarge
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Button(onClick = { viewModel.selectImage("fake://portrait") }) {
-                    Text(text = stringResource(id = R.string.upload_image))
                 }
                 selectedImage?.let {
                     Spacer(modifier = Modifier.height(12.dp))
@@ -297,7 +244,7 @@ fun SmurfMeScreen(
 }
 
 @Composable
-private fun SmurfCard(smurf: Smurf, onClick: () -> Unit) {
+fun SmurfCard(smurf: Smurf, onClick: () -> Unit) {
     Card(modifier = Modifier.clickable(onClick = onClick)) {
         Column(modifier = Modifier.padding(12.dp)) {
             AsyncImage(
@@ -315,7 +262,7 @@ private fun SmurfCard(smurf: Smurf, onClick: () -> Unit) {
 }
 
 @Composable
-private fun SmurfRow(smurf: Smurf, onClick: () -> Unit) {
+fun SmurfRow(smurf: Smurf, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
