@@ -220,6 +220,7 @@ fun SmurfMeScreen(
     val selectedBitmap by viewModel.selectedBitmap.collectAsState()
     val isProcessing by viewModel.isProcessing.collectAsState()
     val showAd by viewModel.showAd.collectAsState()
+    val smurfifiedImageUrl by viewModel.smurfifiedImageUrl.collectAsState()
     val uploadLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri ->
@@ -278,6 +279,22 @@ fun SmurfMeScreen(
                             contentScale = ContentScale.Crop
                         )
                     }
+                }
+                if (!smurfifiedImageUrl.isNullOrBlank()) {
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Text(
+                        text = stringResource(id = R.string.smurfify_complete),
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    AsyncImage(
+                        model = smurfifiedImageUrl,
+                        contentDescription = stringResource(id = R.string.smurfify_complete),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(220.dp),
+                        contentScale = ContentScale.Crop
+                    )
                 }
                 if (selectedBitmap != null || selectedImage != null) {
                     Spacer(modifier = Modifier.height(12.dp))
