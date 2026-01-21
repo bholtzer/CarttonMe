@@ -41,6 +41,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -170,6 +174,7 @@ fun SmurfScreen(smurf: Smurf, onBack: () -> Unit, modifier: Modifier = Modifier)
                     scaleY = bounce
                 )
                 .rotate(rotation)
+            modifier = Modifier.fillMaxSize()
         )
         Column(
             modifier = Modifier
@@ -287,6 +292,7 @@ fun SmurfMeScreen(
 
 @Composable
 private fun SmurfCard(smurf: Smurf, onClick: () -> Unit) {
+fun SmurfCard(smurf: Smurf, onClick: () -> Unit) {
     Card(modifier = Modifier.clickable(onClick = onClick)) {
         Column(modifier = Modifier.padding(12.dp)) {
             AsyncImage(
@@ -305,6 +311,7 @@ private fun SmurfCard(smurf: Smurf, onClick: () -> Unit) {
 
 @Composable
 private fun SmurfRow(smurf: Smurf, onClick: () -> Unit) {
+fun SmurfRow(smurf: Smurf, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
