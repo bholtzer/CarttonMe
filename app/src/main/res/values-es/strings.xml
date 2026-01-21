@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">CarttonMe</string>
+    <string name="loading_title">Cargando la aldea de los Pitufos...</string>
+    <string name="main_title">Conoce a los Pitufos</string>
+    <string name="toggle_layout">Cambiar diseño</string>
+    <string name="smurf_me">Pitufízame</string>
+    <string name="smurf_me_next">Ir al estudio Pitufízame</string>
+    <string name="smurf_me_title">Estudio Pitufízame</string>
+    <string name="smurf_me_mission">Sube o toma una foto para transformar a la persona en un Pitufo real manteniendo su parecido.</string>
+    <string name="upload_image">Subir imagen</string>
+    <string name="take_photo">Tomar foto</string>
+    <string name="processing_status">Buscando a %1$s...</string>
+    <string name="processing_image">Procesando la imagen en segundo plano...</string>
+    <string name="ad_title">Anuncio de la aldea</string>
+    <string name="ad_body">¡Tu pitufización está en camino! Disfruta este mensaje.</string>
+    <string name="close">Cerrar</string>
+    <string name="back">Atrás</string>
+    <string name="smurf_personality">%1$s</string>
+    <string name="smurf_talking">“%1$s”</string>
+</resources>
