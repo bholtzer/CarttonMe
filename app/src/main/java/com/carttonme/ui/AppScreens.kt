@@ -280,7 +280,7 @@ fun SmurfMeScreen(
                         )
                     }
                 }
-                if (!smurfifiedImageUrl.isNullOrBlank()) {
+                if (!smurfifiedImageUrl.isNullOrBlank() && !showAd) {
                     Spacer(modifier = Modifier.height(12.dp))
                     Text(
                         text = stringResource(id = R.string.smurfify_complete),

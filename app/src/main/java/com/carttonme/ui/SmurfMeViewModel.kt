@@ -4,7 +4,6 @@ import android.graphics.Bitmap
 import com.carttonme.data.SmurfifyService
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -50,9 +49,7 @@ class SmurfMeViewModel(
                 originalUri = _selectedImage.value,
                 originalBitmap = _selectedBitmap.value
             )
-            delay(500)
             _isProcessing.value = false
-            _showAd.value = false
             _smurfifiedImageUrl.value = resultUrl
         }
     }
