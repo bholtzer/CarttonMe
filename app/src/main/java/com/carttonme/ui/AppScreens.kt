@@ -1,5 +1,9 @@
 package com.carttonme.ui
 
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -40,6 +44,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.graphics.asImageBitmap
@@ -50,6 +55,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.shape.RoundedCornerShape
+import coil.compose.AsyncImage
+import com.carttonme.R
+import com.carttonme.model.Smurf
+import kotlinx.coroutines.delay
 import coil.compose.AsyncImage
 import com.carttonme.R
 import com.carttonme.model.Smurf
@@ -144,6 +155,41 @@ fun MainScreen(
 @Composable
 fun SmurfScreen(smurf: Smurf, onBack: () -> Unit, modifier: Modifier = Modifier) {
     var isDancing by remember { mutableStateOf(false) }
+    val infiniteTransition = rememberInfiniteTransition(label = "smurfDanceTransition")
+    val danceRotation by infiniteTransition.animateFloat(
+        initialValue = -10f,
+        targetValue = 10f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 420, easing = LinearEasing)
+        ),
+        label = "smurfDanceRotation"
+    )
+    val danceBounce by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = -36f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 420, easing = LinearEasing)
+        ),
+        label = "smurfDanceBounce"
+    )
+    val rotation by animateFloatAsState(
+        targetValue = if (isDancing) danceRotation else 0f,
+        animationSpec = tween(durationMillis = 200),
+        label = "smurfRotationGate"
+    )
+    val bounceOffset by animateFloatAsState(
+        targetValue = if (isDancing) danceBounce else 0f,
+        animationSpec = tween(durationMillis = 200),
+        label = "smurfBounceGate"
+    )
+    val scale by animateFloatAsState(
+        targetValue = if (isDancing) 1.06f else 1f,
+        animationSpec = tween(durationMillis = 200),
+        label = "smurfScaleGate"
+    )
+    LaunchedEffect(isDancing) {
+        if (isDancing) {
+            delay(2600)
     val rotation by animateFloatAsState(
         targetValue = if (isDancing) 6f else 0f,
         animationSpec = tween(durationMillis = 250),
@@ -169,6 +215,9 @@ fun SmurfScreen(smurf: Smurf, onBack: () -> Unit, modifier: Modifier = Modifier)
                 .fillMaxSize()
                 .clickable { isDancing = true }
                 .graphicsLayer(
+                    scaleX = scale,
+                    scaleY = scale,
+                    translationY = bounceOffset
                     scaleX = bounce,
                     scaleY = bounce
                 )
@@ -347,6 +396,10 @@ private fun SmurfCard(smurf: Smurf, onClick: () -> Unit) {
                 contentDescription = smurf.name,
                 modifier = Modifier
                     .fillMaxWidth()
+                    .aspectRatio(1f)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(MaterialTheme.colorScheme.surfaceVariant),
+                contentScale = ContentScale.Fit
                     .height(120.dp),
                 contentScale = ContentScale.Crop
             )
@@ -368,6 +421,11 @@ private fun SmurfRow(smurf: Smurf, onClick: () -> Unit) {
             AsyncImage(
                 model = smurf.imageUrl,
                 contentDescription = smurf.name,
+                modifier = Modifier
+                    .size(88.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(MaterialTheme.colorScheme.surfaceVariant),
+                contentScale = ContentScale.Fit
                 modifier = Modifier.size(72.dp),
                 contentScale = ContentScale.Crop
             )
