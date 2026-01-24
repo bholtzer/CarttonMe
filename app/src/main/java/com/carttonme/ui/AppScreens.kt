@@ -4,6 +4,7 @@ import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -60,6 +61,9 @@ import coil.compose.AsyncImage
 import com.carttonme.R
 import com.carttonme.model.Smurf
 import kotlinx.coroutines.delay
+import coil.compose.AsyncImage
+import com.carttonme.R
+import com.carttonme.model.Smurf
 
 @Composable
 fun LoadingScreen(isLoading: Boolean, modifier: Modifier = Modifier) {
@@ -186,6 +190,19 @@ fun SmurfScreen(smurf: Smurf, onBack: () -> Unit, modifier: Modifier = Modifier)
     LaunchedEffect(isDancing) {
         if (isDancing) {
             delay(2600)
+    val rotation by animateFloatAsState(
+        targetValue = if (isDancing) 6f else 0f,
+        animationSpec = tween(durationMillis = 250),
+        label = "smurfDanceRotation"
+    )
+    val bounce by animateFloatAsState(
+        targetValue = if (isDancing) 1.04f else 1f,
+        animationSpec = tween(durationMillis = 250),
+        label = "smurfDanceBounce"
+    )
+    LaunchedEffect(isDancing) {
+        if (isDancing) {
+            kotlinx.coroutines.delay(1800)
             isDancing = false
         }
     }
@@ -201,6 +218,8 @@ fun SmurfScreen(smurf: Smurf, onBack: () -> Unit, modifier: Modifier = Modifier)
                     scaleX = scale,
                     scaleY = scale,
                     translationY = bounceOffset
+                    scaleX = bounce,
+                    scaleY = bounce
                 )
                 .rotate(rotation)
         )
@@ -381,6 +400,8 @@ private fun SmurfCard(smurf: Smurf, onClick: () -> Unit) {
                     .clip(RoundedCornerShape(12.dp))
                     .background(MaterialTheme.colorScheme.surfaceVariant),
                 contentScale = ContentScale.Fit
+                    .height(120.dp),
+                contentScale = ContentScale.Crop
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(text = smurf.name, style = MaterialTheme.typography.titleMedium)
@@ -405,6 +426,8 @@ private fun SmurfRow(smurf: Smurf, onClick: () -> Unit) {
                     .clip(RoundedCornerShape(12.dp))
                     .background(MaterialTheme.colorScheme.surfaceVariant),
                 contentScale = ContentScale.Fit
+                modifier = Modifier.size(72.dp),
+                contentScale = ContentScale.Crop
             )
             Spacer(modifier = Modifier.width(12.dp))
             Column {
