@@ -152,7 +152,8 @@ fun MainScreen(
 fun SmurfScreen(smurf: Smurf, onBack: () -> Unit, modifier: Modifier = Modifier) {
     var isDancing by remember { mutableStateOf(false) }
     val infiniteTransition = rememberInfiniteTransition(label = "smurfDanceTransition")
-    val danceRotation by infiniteTransition.animateFloat(
+    val danceRotation by infiniteTransition.
+    animateFloat(
         initialValue = -10f,
         targetValue = 10f,
         animationSpec = infiniteRepeatable(
@@ -183,65 +184,77 @@ fun SmurfScreen(smurf: Smurf, onBack: () -> Unit, modifier: Modifier = Modifier)
         animationSpec = tween(durationMillis = 200),
         label = "smurfScaleGate"
     )
-    LaunchedEffect(isDancing) {
-        if (isDancing) {
+    //LaunchedEffect(isDancing) {
+       /* if (isDancing) {
             delay(2600)
-            isDancing = false
-        }
-    }
-    Box(
-        modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        AsyncImage(
-            model = smurf.imageUrl,
-            contentDescription = smurf.name,
-            contentScale = ContentScale.Fit,
-            modifier = Modifier
-                .fillMaxWidth(0.82f)
-                .aspectRatio(3f / 4f)
-                .clickable { isDancing = true }
-                .graphicsLayer(
-                    scaleX = scale,
-                    scaleY = scale,
-                    translationY = bounceOffset
+            val rotation by animateFloatAsState(
+                targetValue = if (isDancing) 6f else 0f,
+                animationSpec = tween(durationMillis = 250),
+                label = "smurfDanceRotation"
+            )
+          *//*  val bounce by animateFloatAsState(
+                targetValue = if (isDancing) 1.04f else 1f,
+                animationSpec = tween(durationMillis = 250),
+                label = "smurfDanceBounce"
+            )*//*
+            LaunchedEffect(isDancing) {
+                if (isDancing) {
+                    kotlinx.coroutines.delay(1800)
+                    isDancing = false
+                }
+            }*/
+            Box(modifier = modifier.fillMaxSize()) {
+                AsyncImage(
+                    model = smurf.imageUrl,
+                    contentDescription = smurf.name,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clickable { isDancing = true }
+                        .graphicsLayer(
+                            scaleX = scale,
+                            scaleY = scale,
+                            translationY = bounceOffset
+                        )
+                        .rotate(rotation)
                 )
-                .rotate(rotation)
-        )
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(24.dp)
-                .align(Alignment.BottomCenter)
-        ) {
-            Text(
-                text = smurf.name,
-                style = MaterialTheme.typography.headlineLarge,
-                color = MaterialTheme.colorScheme.onPrimary
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = stringResource(id = R.string.smurf_personality, smurf.text),
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onPrimary
-            )
-            if (isDancing) {
-                Spacer(modifier = Modifier.height(12.dp))
-                Card(modifier = Modifier.fillMaxWidth()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(24.dp)
+                        .align(Alignment.BottomCenter)
+                ) {
                     Text(
-                        text = stringResource(id = R.string.smurf_talking, smurf.text),
-                        modifier = Modifier.padding(12.dp),
-                        style = MaterialTheme.typography.bodyMedium
+                        text = smurf.name,
+                        style = MaterialTheme.typography.headlineLarge,
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = stringResource(id = R.string.smurf_personality, smurf.text),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                    if (isDancing) {
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Card(modifier = Modifier.fillMaxWidth()) {
+                            Text(
+                                text = stringResource(id = R.string.smurf_talking, smurf.text),
+                                modifier = Modifier.padding(12.dp),
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(12.dp))
+                    ElevatedButton(onClick = onBack) {
+                        Text(text = stringResource(id = R.string.back))
+                    }
                 }
             }
-            Spacer(modifier = Modifier.height(12.dp))
-            ElevatedButton(onClick = onBack) {
-                Text(text = stringResource(id = R.string.back))
-            }
         }
-    }
-}
+
+
+
 
 @Composable
 fun SmurfMeScreen(

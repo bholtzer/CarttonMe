@@ -3,6 +3,7 @@ package com.carttonme
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -15,11 +16,15 @@ import com.carttonme.ui.AppDestination
 import com.carttonme.ui.CarttonMeTheme
 import com.carttonme.ui.LoadingScreen
 import com.carttonme.ui.LoadingViewModel
+import com.carttonme.ui.LoadingScreen
+import com.carttonme.ui.LoadingViewModel
+import com.carttonme.ui.LoadingViewModelFactory
 import com.carttonme.ui.MainScreen
 import com.carttonme.ui.MainViewModel
 import com.carttonme.ui.SmurfMeScreen
 import com.carttonme.ui.SmurfMeViewModel
 import com.carttonme.ui.SmurfScreen
+import com.carttonme.ui.theme.CarttonMeTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
