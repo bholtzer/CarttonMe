@@ -1,10 +1,12 @@
 package com.carttonme.ui
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,6 +16,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -24,6 +27,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
@@ -43,27 +47,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.shape.RoundedCornerShape
 import coil.compose.AsyncImage
 import com.carttonme.R
 import com.carttonme.model.Smurf
 import kotlinx.coroutines.delay
-import coil.compose.AsyncImage
-import com.carttonme.R
-import com.carttonme.model.Smurf
 
 @Composable
 fun LoadingScreen(isLoading: Boolean, modifier: Modifier = Modifier) {
@@ -156,7 +153,8 @@ fun MainScreen(
 fun SmurfScreen(smurf: Smurf, onBack: () -> Unit, modifier: Modifier = Modifier) {
     var isDancing by remember { mutableStateOf(false) }
     val infiniteTransition = rememberInfiniteTransition(label = "smurfDanceTransition")
-    val danceRotation by infiniteTransition.animateFloat(
+    val danceRotation by infiniteTransition.
+    animateFloat(
         initialValue = -10f,
         targetValue = 10f,
         animationSpec = infiniteRepeatable(
@@ -187,76 +185,77 @@ fun SmurfScreen(smurf: Smurf, onBack: () -> Unit, modifier: Modifier = Modifier)
         animationSpec = tween(durationMillis = 200),
         label = "smurfScaleGate"
     )
-    LaunchedEffect(isDancing) {
-        if (isDancing) {
+    //LaunchedEffect(isDancing) {
+       /* if (isDancing) {
             delay(2600)
-    val rotation by animateFloatAsState(
-        targetValue = if (isDancing) 6f else 0f,
-        animationSpec = tween(durationMillis = 250),
-        label = "smurfDanceRotation"
-    )
-    val bounce by animateFloatAsState(
-        targetValue = if (isDancing) 1.04f else 1f,
-        animationSpec = tween(durationMillis = 250),
-        label = "smurfDanceBounce"
-    )
-    LaunchedEffect(isDancing) {
-        if (isDancing) {
-            kotlinx.coroutines.delay(1800)
-            isDancing = false
-        }
-    }
-    Box(modifier = modifier.fillMaxSize()) {
-        AsyncImage(
-            model = smurf.imageUrl,
-            contentDescription = smurf.name,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .fillMaxSize()
-                .clickable { isDancing = true }
-                .graphicsLayer(
-                    scaleX = scale,
-                    scaleY = scale,
-                    translationY = bounceOffset
-                    scaleX = bounce,
-                    scaleY = bounce
+            val rotation by animateFloatAsState(
+                targetValue = if (isDancing) 6f else 0f,
+                animationSpec = tween(durationMillis = 250),
+                label = "smurfDanceRotation"
+            )
+          *//*  val bounce by animateFloatAsState(
+                targetValue = if (isDancing) 1.04f else 1f,
+                animationSpec = tween(durationMillis = 250),
+                label = "smurfDanceBounce"
+            )*//*
+            LaunchedEffect(isDancing) {
+                if (isDancing) {
+                    kotlinx.coroutines.delay(1800)
+                    isDancing = false
+                }
+            }*/
+            Box(modifier = modifier.fillMaxSize()) {
+                AsyncImage(
+                    model = smurf.imageUrl,
+                    contentDescription = smurf.name,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clickable { isDancing = true }
+                        .graphicsLayer(
+                            scaleX = scale,
+                            scaleY = scale,
+                            translationY = bounceOffset
+                        )
+                        .rotate(rotation)
                 )
-                .rotate(rotation)
-        )
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(24.dp)
-                .align(Alignment.BottomCenter)
-        ) {
-            Text(
-                text = smurf.name,
-                style = MaterialTheme.typography.headlineLarge,
-                color = MaterialTheme.colorScheme.onPrimary
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = stringResource(id = R.string.smurf_personality, smurf.text),
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onPrimary
-            )
-            if (isDancing) {
-                Spacer(modifier = Modifier.height(12.dp))
-                Card(modifier = Modifier.fillMaxWidth()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(24.dp)
+                        .align(Alignment.BottomCenter)
+                ) {
                     Text(
-                        text = stringResource(id = R.string.smurf_talking, smurf.text),
-                        modifier = Modifier.padding(12.dp),
-                        style = MaterialTheme.typography.bodyMedium
+                        text = smurf.name,
+                        style = MaterialTheme.typography.headlineLarge,
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = stringResource(id = R.string.smurf_personality, smurf.text),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                    if (isDancing) {
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Card(modifier = Modifier.fillMaxWidth()) {
+                            Text(
+                                text = stringResource(id = R.string.smurf_talking, smurf.text),
+                                modifier = Modifier.padding(12.dp),
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(12.dp))
+                    ElevatedButton(onClick = onBack) {
+                        Text(text = stringResource(id = R.string.back))
+                    }
                 }
             }
-            Spacer(modifier = Modifier.height(12.dp))
-            ElevatedButton(onClick = onBack) {
-                Text(text = stringResource(id = R.string.back))
-            }
         }
-    }
-}
+
+
+
 
 @Composable
 fun SmurfMeScreen(
@@ -394,14 +393,12 @@ private fun SmurfCard(smurf: Smurf, onClick: () -> Unit) {
             AsyncImage(
                 model = smurf.imageUrl,
                 contentDescription = smurf.name,
-                modifier = Modifier
+                modifier = Modifier.height(120.dp)
                     .fillMaxWidth()
                     .aspectRatio(1f)
                     .clip(RoundedCornerShape(12.dp))
                     .background(MaterialTheme.colorScheme.surfaceVariant),
                 contentScale = ContentScale.Fit
-                    .height(120.dp),
-                contentScale = ContentScale.Crop
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(text = smurf.name, style = MaterialTheme.typography.titleMedium)
@@ -426,8 +423,6 @@ private fun SmurfRow(smurf: Smurf, onClick: () -> Unit) {
                     .clip(RoundedCornerShape(12.dp))
                     .background(MaterialTheme.colorScheme.surfaceVariant),
                 contentScale = ContentScale.Fit
-                modifier = Modifier.size(72.dp),
-                contentScale = ContentScale.Crop
             )
             Spacer(modifier = Modifier.width(12.dp))
             Column {
