@@ -15,7 +15,7 @@ import com.carttonme.ui.AppDestination
 import com.carttonme.ui.CarttonMeTheme
 import com.carttonme.ui.LoadingScreen
 import com.carttonme.ui.LoadingViewModel
- import com.carttonme.ui.LoadingScreen
+import com.carttonme.ui.LoadingScreen
 import com.carttonme.ui.LoadingViewModel
 import com.carttonme.ui.LoadingViewModelFactory
 import com.carttonme.ui.MainScreen
